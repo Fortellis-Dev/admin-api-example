@@ -1,0 +1,615 @@
+swagger: '2.0'
+
+info:
+  version: "v0"
+  title: exchange module admin (draft)
+  description: exchange moudle admin (draft)
+
+basePath: /v0/admin/
+
+securityDefinitions:
+  Authorization:
+    type: oauth2
+    flow: application
+    tokenUrl: https://example.com/oauth/token
+    scopes:
+      admin: Grants read and write access to administrative information
+
+security:
+  - Authorization:
+    - admin
+
+paths:
+  /info:
+    get:
+      summary: Queries the information about the module
+      description: Queries the information about the module
+      operationId: queryInfo
+      tags: 
+        - module queries
+      parameters:
+        - $ref: '#/parameters/header:Authorization'
+        - $ref: '#/parameters/header:Accept'
+        - $ref: '#/parameters/header:Accept-Charset'
+        - $ref: '#/parameters/header:Accept-Language'
+        - $ref: '#/parameters/header:Prefer'
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          headers:
+            Content-Language:
+              type: string
+            Content-Type:
+              type: string
+            Preference-Applied:
+              type: string
+              enum:
+                - return=representation
+                - return=minimal
+          schema:
+            $ref: '#/definitions/QueryInfoResponse'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        403:
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        404:
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorResponse' 
+
+  /accounts:
+    get:
+      summary: Queries the accounts
+      description: Queries the accounts
+      operationId: queryAccounts
+      tags: 
+        - account queries
+      parameters:
+        - $ref: '#/parameters/header:Authorization'
+        - $ref: '#/parameters/header:Accept'
+        - $ref: '#/parameters/header:Accept-Charset'
+        - $ref: '#/parameters/header:Accept-Language'
+        - $ref: '#/parameters/header:Prefer'
+        - $ref: '#/parameters/query:pagination:page'
+        - $ref: '#/parameters/query:pagination:pageSize'
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          headers:
+            Content-Language:
+              type: string
+            Content-Type:
+              type: string
+            Preference-Applied:
+              type: string
+              enum:
+                - return=representation
+                - return=minimal
+          schema:
+            $ref: '#/definitions/QueryAccountsResponse'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        403:
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        404:
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+    post:
+      summary: Create an account 
+      description: Create an account
+      operationId: createAccount
+      tags:
+        - account commands
+      parameters:
+        - $ref: '#/parameters/header:Authorization'
+        - $ref: '#/parameters/header:Accept'
+        - $ref: '#/parameters/header:Prefer'
+        - $ref: '#/parameters/header:Request-Id'
+        - $ref: '#/parameters/body:createAccountRequest'
+      produces:
+        - application/json
+      responses:
+        201:
+          description: Created
+          headers:
+            Content-Language:
+              type: string
+            Content-Type:
+              type: string
+            Request-Id:
+              type: string 
+          schema:
+            $ref: '#/definitions/QueryAccountResponse'
+        400:
+          description: Bad Request
+          headers:
+            Content-Language:
+              type: string
+            Content-Type:
+              type: string
+            Request-Id:
+              type: string
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        403:
+          description: Forbidden
+          headers:
+            Content-Language:
+              type: string
+            Content-Type:
+              type: string
+            Request-Id:
+              type: string
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+    
+  /accounts/{accountId}:  
+    get:
+      summary: Query an account by identifier
+      description: Query an account by identifier
+      operationId: queryAccountById
+      tags: 
+        - account queries
+      parameters:
+        - $ref: '#/parameters/header:Authorization'
+        - $ref: '#/parameters/header:Accept'
+        - $ref: '#/parameters/header:Accept-Charset'
+        - $ref: '#/parameters/header:Accept-Language'
+        - $ref: '#/parameters/header:Prefer'
+        - $ref: '#/parameters/path:accountId'
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          headers:
+            Content-Language:
+              type: string
+            Content-Type:
+              type: string
+            Preference-Applied:
+              type: string
+              enum:
+                - return=representation
+                - return=minimal
+          schema:
+            $ref: '#/definitions/QueryAccountResponse'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        403:
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        404:
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+    delete:
+      summary: Delete an account 
+      description: Delete an account
+      operationId: deleteAccount
+      tags:
+        - account commands
+      parameters:
+        - $ref: '#/parameters/header:Authorization'
+        - $ref: '#/parameters/header:Accept'
+        - $ref: '#/parameters/header:Prefer'
+        - $ref: '#/parameters/header:Request-Id'
+        - $ref: '#/parameters/path:accountId'
+      produces:
+        - application/json
+      responses:
+        200:
+          description: Accepted
+          headers:
+            Content-Language:
+              type: string
+            Content-Type:
+              type: string
+            Request-Id:
+              type: string 
+        400:
+          description: Bad Request
+          headers:
+            Content-Language:
+              type: string
+            Content-Type:
+              type: string
+            Request-Id:
+              type: string
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        403:
+          description: Forbidden
+          headers:
+            Content-Language:
+              type: string
+            Content-Type:
+              type: string
+            Request-Id:
+              type: string
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+  
+  /accounts/{accountId}/activate:
+    post:
+      summary: Activate the account  
+      description: Activate the account
+      operationId: activateAccount
+      tags:
+        - account commands
+      parameters:
+        - $ref: '#/parameters/header:Authorization'
+        - $ref: '#/parameters/header:Accept'
+        - $ref: '#/parameters/header:Prefer'
+        - $ref: '#/parameters/header:Request-Id'
+        - $ref: '#/parameters/path:accountId'
+      produces:
+        - application/json
+      responses:
+        201:
+          description: Created
+          headers:
+            Content-Language:
+              type: string
+            Content-Type:
+              type: string
+            Request-Id:
+              type: string 
+          schema:
+            $ref: '#/definitions/CycleCredentialsResponse'
+        400:
+          description: Bad Request
+          headers:
+            Content-Language:
+              type: string
+            Content-Type:
+              type: string
+            Request-Id:
+              type: string
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        403:
+          description: Forbidden
+          headers:
+            Content-Language:
+              type: string
+            Content-Type:
+              type: string
+            Request-Id:
+              type: string
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+  
+  /accounts/{accountId}/deactivate:
+    post:
+      summary: Deactivate the module's user account  
+      description: Deactivate the module's user account
+      operationId: deactivateModuleUserAccount
+      tags:
+        - account commands
+      parameters:
+        - $ref: '#/parameters/header:Authorization'
+        - $ref: '#/parameters/header:Accept'
+        - $ref: '#/parameters/header:Prefer'
+        - $ref: '#/parameters/header:Request-Id'
+        - $ref: '#/parameters/path:accountId'
+      produces:
+        - application/json
+      responses:
+        201:
+          description: Created
+          headers:
+            Content-Language:
+              type: string
+            Content-Type:
+              type: string
+            Request-Id:
+              type: string 
+          schema:
+            $ref: '#/definitions/CycleCredentialsResponse'
+        400:
+          description: Bad Request
+          headers:
+            Content-Language:
+              type: string
+            Content-Type:
+              type: string
+            Request-Id:
+              type: string
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        403:
+          description: Forbidden
+          headers:
+            Content-Language:
+              type: string
+            Content-Type:
+              type: string
+            Request-Id:
+              type: string
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+
+  /accounts/{accountId}/cycle-credentials:
+    post:
+      summary: Cycle the proxy authentication credentials 
+      description: Cycle the proxy authentication credentials
+      operationId: cycleProxyCredentials
+      tags:
+        - account commands
+      parameters:
+        - $ref: '#/parameters/header:Authorization'
+        - $ref: '#/parameters/header:Accept'
+        - $ref: '#/parameters/header:Prefer'
+        - $ref: '#/parameters/header:Request-Id'
+        - $ref: '#/parameters/path:accountId'
+      produces:
+        - application/json
+      responses:
+        201:
+          description: Created
+          headers:
+            Content-Language:
+              type: string
+            Content-Type:
+              type: string
+            Request-Id:
+              type: string 
+          schema:
+            $ref: '#/definitions/CycleCredentialsResponse'
+        400:
+          description: Bad Request
+          headers:
+            Content-Language:
+              type: string
+            Content-Type:
+              type: string
+            Request-Id:
+              type: string
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        403:
+          description: Forbidden
+          headers:
+            Content-Language:
+              type: string
+            Content-Type:
+              type: string
+            Request-Id:
+              type: string
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+  
+parameters:
+  header:Authorization:
+    name: Authorization
+    in: header
+    required: true
+    type: string
+  
+  header:Accept:
+    name: Accept
+    in: header
+    required: true
+    type: string
+    enum:
+      - application/json
+  
+  header:Prefer:
+    name: Prefer
+    in: header
+    required: true
+    type: string
+    enum:
+      - return=representation
+      - return=minimal
+  
+  header:Accept-Charset:
+    name: Accept-Charset
+    in: header
+    required: true
+    type: string
+    enum:
+      - utf-8
+  
+  header:Accept-Language:
+    name: Accept-Language
+    in: header
+    required: true
+    type: string
+  
+  header:Request-Id:
+    name: Request-Id
+    in: header
+    required: true
+    type: string
+    format: guid
+  
+  path:accountId:
+    name: accountId
+    in: path
+    description: The exchange account identifier
+    required: true
+    type: string
+  
+  body:createAccountRequest:
+    name: createAccountRequest
+    in: body
+    description: The details to create an account
+    schema:
+      $ref: '#/definitions/CreateAccountRequest'
+  
+  query:account:status:
+    name: status
+    in: query
+    type: string
+    enum:
+      - ACTIVE
+      - INACTIVE
+    description: Filters user accounts by status
+  
+  query:pagination:page:
+    name: page
+    in: query
+    description: A non-zero integer representing the page of the results
+    type: number
+
+  query:pagination:pageSize:
+    name: pageSize
+    in: query
+    description: A non-negative, non-zero integer indicating the maximum number of results to return at one time
+    type: number
+  
+definitions:
+  # Entities
+  Info:
+    properties:
+      apis:
+        type: array
+        items:
+          properties:
+            api:
+              type: string
+              description: The API that is being implemented
+            fqdn:
+              type: string
+              description: The fully qualified domain name to the api. This should be everything before the basePath specified in the api spec being implemented.
+        description: Links to the APIs supported by the module
+  
+  Account:
+    properties:
+      accountId:
+        type: string
+        format: guid
+        description: The account identifer
+      status:
+        type: string
+        enum:
+        - ACTIVE
+        - INACTIVE
+    required: 
+     - accountId
+     - status
+  
+  Credentials:
+    properties:
+      id:
+        type: string
+      secret:
+        type: string
+
+  # Request
+  CreateAccountRequest:
+    properties:
+      accountId:
+        type: string
+        format: guid
+        description: The requested account identifer
+    required:
+      - accountId
+  
+  # Responses
+  QueryInfoResponse:
+    properties:
+      info:
+        $ref: '#/definitions/Info'
+        description: The account
+      links:
+        type: array
+        items:
+          $ref: '#/definitions/LinkDescriptionObject'
+    required:
+     - info
+     - links
+  
+  QueryAccountsResponse:
+    properties:
+      totalItems:
+        type: number
+      totalPages:
+        type: number
+      items:
+        type: array
+        items:
+          $ref: '#/definitions/Account'
+      links:
+        type: array
+        items:
+          $ref: '#/definitions/LinkDescriptionObject'
+    required:
+      - totalItems
+      - totalPages
+      - items
+      - links
+  
+  QueryAccountResponse:
+    properties:
+      account:
+        $ref: '#/definitions/Account'
+        description: The account
+      links:
+        type: array
+        items:
+          $ref: '#/definitions/LinkDescriptionObject'
+    required:
+     - account
+     - links
+  
+  CycleCredentialsResponse:
+    properties:
+      credentials:
+        $ref: '#/definitions/Credentials'
+        description: The proxy backend authenication credentials
+      links:
+        type: array
+        items:
+          $ref: '#/definitions/LinkDescriptionObject'
+    required:
+     - credentials
+     - links
+  
+  # Common
+  ErrorResponse:
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string
+    required:
+      - code
+      - message
+      
+  LinkDescriptionObject:
+    required:
+      - href
+      - rel
+    properties:
+      href:
+        type: string
+        description: The target URI
+      rel:
+        type: string
+        description: The link relation type
+      method:
+        type: string
+        description: The HTTP verb that MUST be used to make a request to the target of the link
+      title:
+        type: string
+        description: The title property provides a title for the link and is a helpful documentation tool to facilitate understanding by the end clients
