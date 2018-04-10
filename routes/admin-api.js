@@ -106,4 +106,5 @@ router.post('/accounts/:accountId/cycle-credentials', (req, res, next) => {
     //Cycle the id and secret for the given account within your Identity Provider and return the values
     res.status(201).json(cycleCredentialsResponse);
 });
+
 module.exports = router;
