@@ -21,10 +21,16 @@ router.use(function(req, res, next) {
  */
 const infoResponse = {
     info: {
-        apis: [{
-            api: 'v0/example',
-            fqdn: 'http://example.com/apis/v0/example'
-        }]
+        apis: [
+            {
+                api: 'v0/example',
+                fqdn: 'http://example.com/apis/v0/example'
+            },
+            {
+                api: 'v0/anotherExample',
+                fqdn: 'http://example.com/apis/v0/anotherExample'
+            }
+        ]
     }
 }
 
@@ -36,17 +42,29 @@ router.get('/info', (req, res, next) => {
 /**
  * Admin API Accounts Administration
  */
-const account = {
-    accountId: "test-id",
-    status: "ACTIVE"
-};
+const accounts = [
+    {
+        accountId: "test-id",
+        status: "ACTIVE"
+    },
+    {
+        accountId: "test-id2",
+        status: "ACTIVE"
+    },
+    {
+        accountId: "test-id3",
+        status: "ACTIVE"
+    },
+    {
+        accountId: "test-id4",
+        status: "INACTIVE"
+    },
+];
 
 const accountsResponse = {
-    totalItems: 1,
+    totalItems: accounts.length,
     totalPages: 1,
-    items: [
-        account
-    ]
+    items: accounts
 };
 
 router.get('/accounts', (req, res, next) => {
@@ -67,13 +85,17 @@ router.post('/accounts', (req, res, next) => {
         accountId: req.body.accountId,
         status: "ACTIVE"
     };
+    accounts.push(newAccount);
     res.status(201).json(newAccount);
 });
 
 
 router.get('/accounts/:accountId', (req, res, next) => {
     //Return account matching the accountId passed in
-    if(req.params.accountId == 'test-id'){
+    let account = accounts.find(element => {
+        return element.accountId == req.params.accountId;
+    });
+    if(account){
         res.json(account);
     } else {
         res.status(404).json({ code: 404, message: 'Account with id:'+req.params.accountId+' not found.'});
