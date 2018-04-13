@@ -2,9 +2,6 @@
   "name": "admin-api",
   "version": "0.0.1",
   "description": "An example implementation of Admin API module spec v0",
-  "publishConfig": {
-    "registry": "http://artifactory.cdk.com/artifactory/api/npm/npm-repo"
-  },
   "main": "index.js",
   "bin": {
     "admin-api": "bin/index.js"
