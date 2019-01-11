@@ -1,6 +1,6 @@
 {
   "name": "admin-api",
-  "version": "0.0.1",
+  "version": "2.0.0",
   "description": "An example implementation of Admin API module spec v0",
   "main": "index.js",
   "bin": {
@@ -13,6 +13,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.16.3"
+    "express": "^4.16.3",
+    "@okta/jwt-verifier": "0.0.12"
   }
 }
